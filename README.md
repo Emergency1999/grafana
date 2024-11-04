@@ -1,7 +1,9 @@
-# service.template
+# service.grafana.core
 
-service for TEMPLATE
+service for grafana and prometheus
 
 [Documentation of service core](https://github.com/Vereine-Vereint/service.core)
 
-[Documentation of borg](https://github.com/Vereine-Vereint/service.borg)
+## setup grafana
+
+add data source: http://prometheus:9090

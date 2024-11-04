@@ -1,5 +1,5 @@
 #!/bin/bash
-SERVICE_NAME="lowercaseservicename"
+SERVICE_NAME="grafana"
 SERVICE_VERSION="v0.1"
 
 set -e
@@ -33,9 +33,10 @@ set +o allexport
 # }
 
 # Configure function that is called before the docker up, start and restart commands
-# att_configure() {
-#   echo "Configuring..."
-# }
+att_configure() {
+  mkdir -p $SERVICE_DIR/generated
+  generate $SERVICE_DIR/templates/prometheus.yml $SERVICE_DIR/generated/prometheus.yml
+}
 
 # MAIN
 main "$@"

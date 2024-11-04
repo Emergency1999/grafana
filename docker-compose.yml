@@ -4,26 +4,33 @@ networks:
     external: true
 
 services:
-  example:
-    image: whoami
-    restart: unless-stopped
+  prometheus:
+    image: prom/prometheus
     # ports:
-    #   - 80:80 # Port of service
+    #   - 9090:9090
     volumes:
-    # use generated folder for generated templates
-    # - ./generated/example:/example:ro # generated template "named example"
-    # use volumes folder for data persistance
-    - ./volumes/test:/test # volume "test" for service
-    env_file:
-    - ../${ENV_FILE} # load selected environment file
-
+      - ./generated/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./volumes/prometheus:/prometheus
     networks:
-    - traefik # add to traefik network
-    - default # add to default (stack internal) network
+      - traefik
+    restart: unless-stopped
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.prometheus.rule=Host(`${PROMETHEUS_DOMAIN}`)"
+    #   - "traefik.http.routers.prometheus.entrypoints=websecure"
 
-    # add labels to connect to traefik
+  grafana:
+    image: grafana/grafana
+    # ports:
+    #   - "3000:3000"  # Expose Grafana web interface
+    volumes:
+    - ./volumes/grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    networks:
+      - traefik
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      #! replace EXAMPLE with your service name
-      - "traefik.http.routers.EXAMPLE.rule=Host(`${EXAMPLE_DOMAIN}`)"
-      - "traefik.http.routers.EXAMPLE.entrypoints=websecure"
+      - "traefik.http.routers.grafana.rule=Host(`${GRAFANA_DOMAIN}`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"

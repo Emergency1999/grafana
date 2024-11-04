@@ -1,0 +1,5 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+$(with_spaces 2 "$PROMETHEUS_JOBS")
