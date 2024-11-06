@@ -28,9 +28,10 @@ set +o allexport
 # ATTACHMENTS
 
 # Setup function that is called before the docker up command
-# att_setup() {
-#   echo "Setting up..."
-# }
+att_setup() {
+  sudo mkdir -p volumes/{prometheus,grafana}
+  sudo chmod 777 volumes/{prometheus,grafana}
+}
 
 # Configure function that is called before the docker up, start and restart commands
 att_configure() {
